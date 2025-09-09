@@ -1,4 +1,4 @@
--- GG
+-- GG z
 
 if getgenv().Library then 
 	getgenv().Library:Unload()
@@ -5009,10 +5009,10 @@ local Library do
 			end
 		end)
 
-		Library:Connect(RunService.RenderStepped, function()
-			local MouseLocation = UserInputService:GetMouseLocation() 
-			Items["Cursor"].Instance.Position = UDim2New(0, MouseLocation.X - 1, 0, MouseLocation.Y - 56)           
-		end)
+		-- Library:Connect(RunService.RenderStepped, function()
+		-- 	local MouseLocation = UserInputService:GetMouseLocation() 
+		-- 	Items["Cursor"].Instance.Position = UDim2New(0, MouseLocation.X - 1, 0, MouseLocation.Y - 56)           
+		-- end)
 
 		Items["MinimizeButton"]:Connect("MouseButton1Down", function()
 			Window:Minimize(not IsMinisize)

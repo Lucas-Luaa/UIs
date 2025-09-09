@@ -1,3 +1,5 @@
+-- GG
+
 if getgenv().Library then 
 	getgenv().Library:Unload()
 end
@@ -4927,7 +4929,7 @@ local Library do
 			Window.Items = Items
 		end
 
-		UserInputService.MouseIconEnabled = false
+		UserInputService.MouseIconEnabled = true
 
 		local Debounce = false
 
@@ -5002,7 +5004,7 @@ local Library do
 			if tostring(Input.KeyCode) == Library.MenuKeybind or tostring(Input.UserInputType) == Library.MenuKeybind then
 				Window.IsOpen = not Window.IsOpen
 				Items["Image"].Instance.Visible = Window.IsOpen
-				UserInputService.MouseIconEnabled = not Window.IsOpen
+				UserInputService.MouseIconEnabled = true
 				Items["MainFrame"].Instance.Visible = Window.IsOpen
 			end
 		end)

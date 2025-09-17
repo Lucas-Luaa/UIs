@@ -5,19 +5,19 @@ if getgenv().Library then
 end
 
 if not isfolder("Astroxel") then
-    makefolder("Astroxel")
+	makefolder("Astroxel")
 end
 
 if not isfolder("Astroxel/Assets") then
-    makefolder("Astroxel/Assets")
+	makefolder("Astroxel/Assets")
 end
 
 if not isfolder("Astroxel/Configs") then
-    makefolder("Astroxel/Configs")
+	makefolder("Astroxel/Configs")
 end
 
 if not isfolder("Astroxel/Themes") then
-    makefolder("Astroxel/Themes")
+	makefolder("Astroxel/Themes")
 end
 
 local Library do
@@ -238,6 +238,45 @@ local Library do
 			["Gradient"] = FromRGB(216, 216, 216)
 		}
 	}
+	
+	local Il = loadstring(game:HttpGet("https://raw.githubusercontent.com/Dummyrme/Library/refs/heads/main/Icon.lua"))()
+	function getIconData(i)
+		local id = Il.Icons[i]
+		if id then
+			local imG = Il.Spritesheets[tostring(id.Image)]
+			if imG then
+				return {
+					Image = Il.Spritesheets[tostring(id.Image)],
+					ImageRectSize = id.ImageRectSize,
+					ImageRectPosition = id.ImageRectPosition,
+				}
+			end
+		end
+		if type(i) == 'string' and not i:find('rbxassetid://') then
+			return {
+				Image = "rbxassetid://".. i,
+				ImageRectSize = Vector2.new(0, 0),
+				ImageRectPosition = Vector2.new(0, 0),
+			}
+		elseif type(i) == 'number' then
+			return {
+				Image = "rbxassetid://".. i,
+				ImageRectSize = Vector2.new(0, 0),
+				ImageRectPosition = Vector2.new(0, 0),
+			}
+		else
+			return i
+		end
+	end
+	function gl(obj, id)
+		local dt = getIconData(id)
+		if typeof(obj) == "Instance" and obj:IsA("GuiObject") and dt then
+			obj.Image = dt.Image
+			obj.ImageRectSize = dt.ImageRectSize
+			obj.ImageRectOffset = dt.ImageRectPosition
+		end
+		return dt
+	end
 
 	Library.Theme = TableClone(Themes["Default"])
 	Library.Themes = Themes
@@ -5036,6 +5075,7 @@ local Library do
 			Window = self,
 
 			Name = Properties.Name or Properties.name or "Page",
+			Icon = Properties.Icon or Properties.icon or '',
 			Columns = Properties.Columns or Properties.columns or 2,
 
 			Active = false,
@@ -5060,8 +5100,21 @@ local Library do
 				ClipsDescendants = true,
 				ZIndex = 2,
 				TextSize = 14,
-				BackgroundColor3 = FromRGB(22, 20, 24)
+				BackgroundColor3 = FromRGB(22, 20, 24),
 			})  Items["Inactive"]:AddToTheme({BackgroundColor3 = "Inline"})
+			
+			Items["Icon"] = Instances:Create("ImageLabel", {
+				Parent = Items["Inactive"].Instance,
+				Name = "\0",
+				Size = UDim2New(0, 20, 0, 20),
+				AnchorPoint = Vector2New(0, 0.5),
+				BackgroundTransparency = 1,
+				ZIndex = 3,
+				Position = UDim2New(0, 8, 0.5, 0),
+				ImageTransparency = 0.4,
+			})
+			
+			gl(Items["Icon"].Instance, Page.Icon)
 
 			Instances:Create("UICorner", {
 				Parent = Items["Inactive"].Instance,
@@ -5100,7 +5153,7 @@ local Library do
 				AnchorPoint = Vector2New(0, 0.5),
 				BorderSizePixel = 0,
 				BackgroundTransparency = 1,
-				Position = UDim2New(0, 4, 0.5, 0),
+				Position = UDim2New(0, 32, 0.5, 0),
 				BorderColor3 = FromRGB(0, 0, 0),
 				ZIndex = 2,
 				TextSize = 14,
@@ -5206,13 +5259,16 @@ local Library do
 
 				Items["Liner"]:Tween(nil, {BackgroundTransparency = 0, Size = UDim2New(0, 6, 1, -20)})
 				Items["Inactive"]:Tween(nil, {BackgroundTransparency = 0})
-				Items["Text"]:Tween(nil, {TextTransparency = 0, Position = UDim2New(0, 12, 0.5, 0)})
+				Items["Text"]:Tween(nil, {TextTransparency = 0, Position = UDim2New(0, 35, 0.5, 0)})
+				Items["Icon"]:Tween(nil, {ImageTransparency = 0, Position = UDim2New(0, 12, 0.5, 0)})
 
 				Library.CurrentPage = Page
 			else
 				Items["Liner"]:Tween(nil, {BackgroundTransparency = 1, Size = UDim2New(0, 3, 1, -20)})
 				Items["Inactive"]:Tween(nil, {BackgroundTransparency = 1})
-				Items["Text"]:Tween(nil, {TextTransparency = 0.4, Position = UDim2New(0, 4, 0.5, 0)})
+				Items["Text"]:Tween(nil, {TextTransparency = 0.4, Position = UDim2New(0, 32, 0.5, 0)})
+				Items["Icon"]:Tween(nil, {ImageTransparency = 0.4, Position = UDim2New(0, 8, 0.5, 0)})
+				
 				Items["Page"].Instance.Visible = false
 			end
 		end
